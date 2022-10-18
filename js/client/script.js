@@ -5,24 +5,12 @@ const close_url = "./img/close.png";
 let agreeCalculation = 0.00;
 let disagreeCalculation = 0.00;
 
-let page = "";
+let page = 0;
 
 let choice1 = false;
 let choice2 = false;
 
-this.endpoint = 'https://crdds-climate-game.herokuapp.com';
-
-var data;
-
-async function _dataLoad() {
-  const response = await fetch(this.endpoint);
-  const x = await response.json()
-  .then(x => { return x } );
-  console.log(x);
-};
-
-data = _dataLoad();
-console.log(data);
+this.endpoint = 'http://ec2-52-39-147-47.us-west-2.compute.amazonaws.com:3000';
 
 /*
 function displayCredits() {
@@ -31,25 +19,25 @@ function displayCredits() {
 */
 
 if (document.URL.includes("q1.html") ) {
-  page = "q1"
+  page = 0;
 }
 else if (document.URL.includes("q2.html") ) {
-  page = "q2"
+  page = 1;
 }
 else if (document.URL.includes("q3.html") ) {
-  page = "q3"
+  page = 2;
 }
 else if (document.URL.includes("q4.html") ) {
-  page = "q4"
+  page = 3;
 }
 else if (document.URL.includes("q5.html") ) {
-  page = "q5"
+  page = 4;
 }
 else if (document.URL.includes("q6.html") ) {
-  page = "q6"
+  page = 5;
 }
 else if (document.URL.includes("q7.html") ) {
-  page = "q7"
+  page = 6;
 }
 
 function changeImage1() {
@@ -104,31 +92,38 @@ async function _refresh() {
   const response = await fetch(this.endpoint);
   const data = await response.json();
 
-  let totalValue = (data[page][0]["Yes"]+data[page][0]["No"]);
+  console.log(data);
+  console.log(data[1]);
+
+  let totalValue = (data[page]["qyes"]+data[page]["qno"]);
+  console.log(totalValue);
 
   if (choice1 === true) {
-    agreeCalculation = 100 * ( (data[page][0]["Yes"])/(data[page][0]["Yes"] + data[page][0]["No"]));
+    agreeCalculation = 100 * ( (data[page]["qyes"])/(data[page]["qyes"] + data[page]["qno"]));
     disagreeCalculation = (100 - agreeCalculation);
 
-    let yesValue = data[page][0]["Yes"] + 1;
+    let yesValue = data[page]["qyes"] + 1;
     console.log(yesValue);
   
     document.getElementById("total").innerText = `${ totalValue }`;
     document.getElementById("agree").innerText = `${ agreeCalculation.toFixed(1) }`;
     document.getElementById("disagree").innerText = `${ disagreeCalculation.toFixed(1) }`;
     
+    page = page + 1;
   }
 
   else if (choice2 === true) {
-    agreeCalculation = (100 * (data[page][0]["No"])/(data[page][0]["Yes"] + data[page][0]["No"]));
+    agreeCalculation = (100 * (data[page]["qno"])/(data[page]["qyes"] + data[page]["qno"]));
     disagreeCalculation = (100 - agreeCalculation);
   
     document.getElementById("total").innerText = `${ totalValue }`;
     document.getElementById("agree").innerText = `${ agreeCalculation.toFixed(1) }`;
     document.getElementById("disagree").innerText = `${ disagreeCalculation.toFixed(1) }`;
 
-    let noValue = data[page][0]["No"] + 1;
+    let noValue = data[page]["qno"] + 1;
     console.log(noValue);
+
+    page = page + 1;
   }
 
 }
@@ -139,8 +134,9 @@ async function pushData() {
         console.log("yes");
             fetch(this.endpoint, {
                 method: "post",
+                mode: 'cors',
                 body: 
-                  `add=Yes&question=${ page }`,
+                  `question=${ page }&answer=yes`,
             headers: {
                 "Content-Type": "application/x-www-form-urlencoded"
             }
@@ -150,7 +146,8 @@ async function pushData() {
         console.log("no");
         fetch(this.endpoint, {
             method: "post",
-            body: `add=No&question=${ page }`,
+            mode: 'cors',
+            body: `question=${ page }&answer=no`,
             headers: {
                 "Content-Type": "application/x-www-form-urlencoded"
             }
