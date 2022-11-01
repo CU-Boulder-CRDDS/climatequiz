@@ -5,7 +5,7 @@ const close_url = "./img/close.png";
 let agreeCalculation = 0.00;
 let disagreeCalculation = 0.00;
 
-let page = 0;
+let page;
 
 let choice1 = false;
 let choice2 = false;
@@ -18,27 +18,29 @@ function displayCredits() {
 }
 */
 
-if (document.URL.includes("q1.html") ) {
+if (document.URL.includes("q1") ) {
   page = 0;
 }
-else if (document.URL.includes("q2.html") ) {
+else if (document.URL.includes("q2") ) {
   page = 1;
 }
-else if (document.URL.includes("q3.html") ) {
+else if (document.URL.includes("q3") ) {
   page = 2;
 }
-else if (document.URL.includes("q4.html") ) {
+else if (document.URL.includes("q4") ) {
   page = 3;
 }
-else if (document.URL.includes("q5.html") ) {
+else if (document.URL.includes("q5") ) {
   page = 4;
 }
-else if (document.URL.includes("q6.html") ) {
+else if (document.URL.includes("q6") ) {
   page = 5;
 }
-else if (document.URL.includes("q7.html") ) {
+else if (document.URL.includes("q7") ) {
   page = 6;
 }
+
+console.log('Page '+ page);
 
 function changeImage1() {
   changeImage1 = function(){}; // kill it as soon as it was called
@@ -93,7 +95,6 @@ async function _refresh() {
   const data = await response.json();
 
   console.log(data);
-  console.log(data[1]);
 
   let totalValue = (data[page]["qyes"]+data[page]["qno"]);
   console.log(totalValue);
