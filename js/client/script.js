@@ -91,8 +91,10 @@ function changeImage2() {
 }
 
 async function _refresh() {
-  const response = await fetch(this.endpoint);
-  const data = await response.json();
+  //const response = await fetch(this.endpoint);
+  //const data = await response.json();
+
+  const data = [{"id":1,"qyes":34,"qno":64},{"id":2,"qyes":37,"qno":58},{"id":3,"qyes":35,"qno":61},{"id":4,"qyes":33,"qno":56},{"id":5,"qyes":14,"qno":70},{"id":6,"qyes":22,"qno":58},{"id":7,"qyes":29,"qno":46}]
 
   console.log(data);
 
@@ -129,7 +131,7 @@ async function _refresh() {
 
 }
 
-async function pushData() {
+/* async function pushData() {
   if (!this.selected) {
     if (choice1 === true) {
         console.log("yes");
@@ -155,4 +157,4 @@ async function pushData() {
         })
     }
 }
-}
+}*/
